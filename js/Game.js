@@ -1,3 +1,5 @@
+//initializes a game object, with 5 phrase objects. sets missed property to 0,
+//and activePhrase to null.
 class Game{
   constructor(){
     this.missed = 0;
@@ -11,6 +13,7 @@ class Game{
     this.activePhrase = null;
   }
 
+//returns random phrase from this.phrases array
   get randomPhrase(){
     let index = Math.floor(Math.random() * (this.phrases.length));
     phrase.phrase = this.phrases[index];
@@ -18,30 +21,36 @@ class Game{
     return phrase.phrase;
   }
 
+//sets activePhrase in the game according to the phrase returned from getter
+//method.
   startGame(){
     document.getElementById('overlay').style.display = 'none';
     this.activePhrase = this.randomPhrase;
     this.activePhrase.addPhraseToDisplay();
-    console.log('startGame method triggered');
   }
 
+//method to be called during event listeners when a key is clicked or keyed
+//from keyboard. disables keys, modifies class Names, removes life and ends game if
+//game is lost (checkforWin method returns true) or lost (missed property equals 5).
   handleInteraction(e){
     e.target.disabled = true;
     let lis = document.querySelector('ul').children;
+    let letters = [];
     for (let i = 0; i < lis.length; i++){
-      if (e.target.textContent === lis[i].textContent) {
-          e.target.classList.add('chosen');
-          phrase.showMatchedLetter();
-          if(game.checkForWin()){
-            game.gameOver();
-          }
-      } else {
-          e.target.classList.remove('wrong');
-          this.removeLife();
-      }
+      letters.push(lis[i].textContent);
+    } if (letters.includes(e.target.textContent)) {
+        e.target.classList.add('chosen');
+        this.activePhrase.showMatchedLetter(e.target.textContent);
+    } if (this.checkforWin()) {
+      this.gameOver();
+    } else if (!letters.includes(e.target.textContent)) {
+        e.target.classList.add('wrong');
+        this.removeLife();
     }
-  }
+};
 
+//checks if letter selected matches letter in activePhrase. if so, added to numberRevealed.
+//if numberRevealed = length of activePhrase, method returns true.
   checkforWin(){
     let lis = document.querySelector('ul').children;
     let numberRevealed = 0;
@@ -54,26 +63,26 @@ class Game{
           numberRevealed++;
     } if (numberRevealed === lis.length){
             return true
-        }
     }
-  };
+  }
+};
 
+//replaces liveHeart image with lostHeart image each time a wrong letter is guessed
+//or method is called. if this.missed = 5, gameOver method is called.
   removeLife(){
     let lives = document.getElementsByTagName('img');
-    if (lives[this.missed].src = "images/liveHeart.png"){
-          lives[this.missed].src = "images/lostHeart.png"
-          this.missed+=1;
-    } if (lives[this.missed].src = "images/lostHeart.png"){
-        this.missed+=1;
-    } if (this.missed === 5){
+    lives[this.missed].src = "images/lostHeart.png"
+    this.missed+=1;
+    if (this.missed === 5){
         this.gameOver();
       }
     };
 
-
+//changes display of overlay element and textContent of gameover message
+//depending on whether game is lost or won.
   gameOver(gameWon){
     document.getElementById('overlay').style.display = 'block';
-    if (this.missed === 5){
+    if (this.missed === 5 || !this.checkforWin()){
       gameWon = false;
       document.getElementById('game-over-message').textContent = 'Sorry, game over!'
       document.getElementById('game-over-message').className = 'lose';
@@ -81,6 +90,6 @@ class Game{
       gameWon = true;
       document.getElementById('game-over-message').textContent = 'You win!'
       document.getElementById('game-over-message').className = 'win';
-    } /// think you also need to check if checkForWin returns false.
+    }
   }
-}
+};
