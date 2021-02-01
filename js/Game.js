@@ -32,22 +32,30 @@ class Game{
 //method to be called during event listeners when a key is clicked or keyed
 //from keyboard. disables keys, modifies class Names, removes life and ends game if
 //game is lost (checkforWin method returns true) or lost (missed property equals 5).
-  handleInteraction(e){
-    e.target.disabled = true;
+
+  handleInteraction(key){
+    let keyrows = document.querySelectorAll('.keyrow')
+    let keys = []
+    for (let i = 0; i < keyrows.length; i++){
+      for (let j = 0; j < keyrows[i].children.length; j++){
+        keys.push(keyrows[i].children[j]);
+      }
+    }
     let lis = document.querySelector('ul').children;
     let letters = [];
     for (let i = 0; i < lis.length; i++){
       letters.push(lis[i].textContent);
-    } if (letters.includes(e.target.textContent)) {
-        e.target.classList.add('chosen');
-        this.activePhrase.showMatchedLetter(e.target.textContent);
+    } if (letters.includes(key.textContent)) {
+        key.classList.add('chosen');
+        this.activePhrase.showMatchedLetter(key.textContent);
     } if (this.checkforWin()) {
       this.gameOver();
-    } else if (!letters.includes(e.target.textContent)) {
-        e.target.classList.add('wrong');
+    } else if (!letters.includes(key.textContent)) {
+        key.classList.add('wrong');
         this.removeLife();
     }
-};
+  }; 
+
 
 //checks if letter selected matches letter in activePhrase. if so, added to numberRevealed.
 //if numberRevealed = length of activePhrase, method returns true.
