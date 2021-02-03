@@ -1,12 +1,9 @@
 
-
-//initalizes new game object upon page load.
-let game = new Game;
-
-//click event listener that calls handleInteraction method, and clears out changes
-//caused by interacting w game, before starting new game.
+//click event listener for start game button that initializes new game, 
+//and clears out older game if exists before starting new one.
 document.getElementById('btn__reset').addEventListener('click', (e) => {
-  if (game.missed === 5 || game.checkforWin()){
+let game = new Game;
+if (game.missed === 5 || game.checkforWin()){
      //clears out lis from previous activePhrase
      let ul = document.getElementById('phrase').firstElementChild;
      let lis = []
@@ -30,9 +27,9 @@ document.getElementById('btn__reset').addEventListener('click', (e) => {
      for (let i = 0; i < lives.length; i++){
        lives[i].src = "images/liveHeart.png"
      }
-     game.startGame();
- } else {
    game.startGame();
+ } else {
+     game.startGame();
  }
 });
 
@@ -51,6 +48,7 @@ window.addEventListener('keyup', e => {
   for (let i = 0; i < keys.length; i++){
     if (e.key === keys[i].textContent){
       game.handleInteraction(keys[i]);
+      console.log(keys[i])
     }
     }
   });
@@ -58,5 +56,6 @@ window.addEventListener('keyup', e => {
 document.querySelectorAll('.key').forEach(key => {
   key.addEventListener('click', e => {
   game.handleInteraction(key)
+  console.log(key)
     })
 });

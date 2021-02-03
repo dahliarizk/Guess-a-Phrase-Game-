@@ -46,15 +46,17 @@ class Game{
     for (let i = 0; i < lis.length; i++){
       letters.push(lis[i].textContent);
     } if (letters.includes(key.textContent)) {
+        key.disabled = true;
         key.classList.add('chosen');
         this.activePhrase.showMatchedLetter(key.textContent);
-    } if (this.checkforWin()) {
-      this.gameOver();
-    } else if (!letters.includes(key.textContent)) {
+        if (this.checkforWin())
+          this.gameOver();
+    } else if (!letters.includes(key.textContent) && !key.disabled) {
+        key.disabled = true;
         key.classList.add('wrong');
         this.removeLife();
     }
-  }; 
+  };
 
 
 //checks if letter selected matches letter in activePhrase. if so, added to numberRevealed.
@@ -93,11 +95,11 @@ class Game{
     if (this.missed === 5 || !this.checkforWin()){
       gameWon = false;
       document.getElementById('game-over-message').textContent = 'Sorry, game over!'
-      document.getElementById('game-over-message').className = 'lose';
+      document.getElementById('overlay').className = 'lose';
   } else if (this.checkforWin()){
       gameWon = true;
       document.getElementById('game-over-message').textContent = 'You win!'
-      document.getElementById('game-over-message').className = 'win';
+      document.getElementById('overlay').className = 'win';
     }
   }
 };
