@@ -14,7 +14,7 @@ class Game{
   }
 
 //returns random phrase from this.phrases array
-  get randomPhrase(){
+  getRandomPhrase(){
     let index = Math.floor(Math.random() * (this.phrases.length));
     phrase.phrase = this.phrases[index];
     console.log(phrase.phrase);
@@ -25,13 +25,13 @@ class Game{
 //method.
   startGame(){
     document.getElementById('overlay').style.display = 'none';
-    this.activePhrase = this.randomPhrase;
+    this.activePhrase = this.getRandomPhrase();
     this.activePhrase.addPhraseToDisplay();
   }
 
 //method to be called during event listeners when a key is clicked or keyed
 //from keyboard. disables keys, modifies class Names, removes life and ends game if
-//game is lost (checkforWin method returns true) or lost (missed property equals 5).
+//game is lost (checkForWin method returns true) or lost (missed property equals 5).
 
   handleInteraction(key){
     let keyrows = document.querySelectorAll('.keyrow')
@@ -49,7 +49,7 @@ class Game{
         key.disabled = true;
         key.classList.add('chosen');
         this.activePhrase.showMatchedLetter(key.textContent);
-        if (this.checkforWin())
+        if (this.checkForWin())
           this.gameOver();
     } else if (!letters.includes(key.textContent) && !key.disabled) {
         key.disabled = true;
@@ -61,7 +61,7 @@ class Game{
 
 //checks if letter selected matches letter in activePhrase. if so, added to numberRevealed.
 //if numberRevealed = length of activePhrase, method returns true.
-  checkforWin(){
+  checkForWin(){
     let lis = document.querySelector('ul').children;
     let numberRevealed = 0;
     for (let i = 0; i < lis.length; i++) {
@@ -92,11 +92,11 @@ class Game{
 //depending on whether game is lost or won.
   gameOver(gameWon){
     document.getElementById('overlay').style.display = 'block';
-    if (this.missed === 5 || !this.checkforWin()){
+    if (this.missed === 5 || !this.checkForWin()){
       gameWon = false;
       document.getElementById('game-over-message').textContent = 'Sorry, game over!'
       document.getElementById('overlay').className = 'lose';
-  } else if (this.checkforWin()){
+  } else if (this.checkForWin()){
       gameWon = true;
       document.getElementById('game-over-message').textContent = 'You win!'
       document.getElementById('overlay').className = 'win';

@@ -1,9 +1,11 @@
 
-//click event listener for start game button that initializes new game, 
+//click event listener for start game button that initializes new game,
 //and clears out older game if exists before starting new one.
+let game;
+
 document.getElementById('btn__reset').addEventListener('click', (e) => {
-let game = new Game;
-if (game.missed === 5 || game.checkforWin()){
+game = new Game;
+if (!game.gameOver() || game.checkForWin()){
      //clears out lis from previous activePhrase
      let ul = document.getElementById('phrase').firstElementChild;
      let lis = []
@@ -27,9 +29,13 @@ if (game.missed === 5 || game.checkforWin()){
      for (let i = 0; i < lives.length; i++){
        lives[i].src = "images/liveHeart.png"
      }
+
    game.startGame();
+   console.log('second game');
  } else {
+     game = new Game;
      game.startGame();
+     console.log('first game not cleared')
  }
 });
 
